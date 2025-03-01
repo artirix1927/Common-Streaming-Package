@@ -5,8 +5,8 @@ from kafka import KafkaConsumer
 
 
 class KafkaConsumerClass(MessageConsumer):
-    def __init__(self):
-        self.consumer = KafkaConsumer(bootstrap_servers='kafka:9092')
+    def __init__(self, path: str):
+        self.consumer = KafkaConsumer(bootstrap_servers=path)
 
     def consume(self, topic: str, callback: Callable):
         self.consumer.subscribe([topic])
@@ -15,9 +15,9 @@ class KafkaConsumerClass(MessageConsumer):
 
 
 class RedisConsumerClass(MessageConsumer):
-    def __init__(self):
+    def __init__(self, path: str):
         self.client = redis.Redis.from_url(
-            "redis://redis-server:6379/1", decode_responses=True)
+            path, decode_responses=True)
 
     def consume(self, topic: str, callback: Callable):
         pubsub = self.client.pubsub()
